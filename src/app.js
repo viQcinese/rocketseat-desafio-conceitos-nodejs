@@ -14,7 +14,7 @@ app.get("/repositories", (request, response) => {
 });
 
 app.post("/repositories", (request, response) => {
-  request.body.id = uuid();
+  if (!request.body.id) request.body.id = uuid();
   request.body.likes = 0;
   repositories.push(request.body)
   response.send(request.body)
@@ -26,11 +26,9 @@ app.put("/repositories/:id", (request, response) => {
 
   const repIndex = repositories.findIndex( rep => rep.id === id )
 
-  console.log(repIndex)
-
   if (repIndex < 0) {
     return response.status(400).json({
-      success: "false",
+      success: false,
       error: "Repository not found"
     })
   }
